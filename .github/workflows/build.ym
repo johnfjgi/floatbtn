@@ -1,0 +1,22 @@
+name: Build dylib
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: |
+          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib -fobjc-arc \
+            -framework UIKit -miphoneos-version-min=13.0 \
+            -o FloatBtn.dylib FloatBtn.m
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FloatBtn-dylib
+          path: FloatBtn.dylib
